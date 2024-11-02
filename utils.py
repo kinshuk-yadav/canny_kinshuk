@@ -38,7 +38,7 @@ def add_noise(img, noise_type="salt_and_pepper", percentage_of_noise=0.2):
     
     return noisy_img
 
-def load_with_noise(dir_name='faces_imgs', noise_type="salt_and_pepper", percentage_of_noise=0.2):
+def load_with_noise(dir_name='canny_kinshuk/faces_imgs', noise_type="salt_and_pepper", percentage_of_noise=0.2):
     """
     Load images from a specified directory, convert to grayscale, and apply noise.
     

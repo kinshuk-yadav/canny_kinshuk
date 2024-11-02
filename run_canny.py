@@ -6,7 +6,8 @@ import cv2
 import numpy as np
 from canny_try import cannyEdgeDetector
 from improved_canny_try import ImprovedCannyEdgeDetector
-# from canny_cuda import CannyEdgeDetectorCUDA
+from cuda_cpu import CannyEdgeDetectorCUDA
+import time
 
 def main():
     # Load the image in grayscale
@@ -24,15 +25,27 @@ def main():
     # Initialize the Canny edge detector with the image
     edge_detector = cannyEdgeDetector(imgs)
     imp = ImprovedCannyEdgeDetector(imgs)
-    # edge_detector_cuda = CannyEdgeDetectorCUDA(imgs)
+    edge_detector_cuda = CannyEdgeDetectorCUDA(imgs)
     
     # Run the edge detection
+    start_time_edges = time.time()
     edges = edge_detector.detect()
+    end_time_edges = time.time()
+    print(f"Time taken by 'edges': {end_time_edges - start_time_edges} seconds")
+
+    start_time_edges2 = time.time()
     edges2 = imp.detect()
-    # edges_cuda = edge_detector_cuda.detect()
+    end_time_edges2 = time.time()
+    print(f"Time taken by 'edges2': {end_time_edges2 - start_time_edges2} seconds")
+
+    start_time_edges_cuda = time.time()
+    edges_cuda = edge_detector_cuda.detect()
+    end_time_edges_cuda = time.time()
+    print(f"Time taken by 'edges cuda': {end_time_edges_cuda - start_time_edges_cuda} seconds")
+    
     # img.append(edges)
     # imgs.append(edges)
-    imgs = imgs + edges + edges2 
+    imgs = imgs + edges + edges2 + edges_cuda 
     visualize(imgs, 'gray')
     
     # Convert the result to uint8 for display compatibility
