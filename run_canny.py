@@ -55,7 +55,7 @@ def main():
     # img.append(edges)
     # imgs.append(edges)
     # imgs = imgs + edges + edges2 + edges_cuda 
-    imgs = imgs + edges2 + edges_cuda
+    imgs = imgs + edges + edges4
     visualize(imgs, 'gray')
     
     # Convert the result to uint8 for display compatibility
