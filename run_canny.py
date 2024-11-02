@@ -7,14 +7,17 @@ import numpy as np
 from canny_try import cannyEdgeDetector
 from improved_canny_try import ImprovedCannyEdgeDetector
 from cuda_cpu import CannyEdgeDetectorCUDA
+from improved_canny_cuda import ImprovedCannyEdgeDetectorCUDA
 import time
 
 def main():
     # Load the image in grayscale
     print("hi")
-    image_path = './lenna.jpeg'
-    # img = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
-    imgs = load_with_noise(percentage_of_noise=0.01)
+    # image_path = './lenna.jpeg'
+    # # img = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
+
+    # imgs = load_with_noise(percentage_of_noise=0.01)
+    imgs = load_data()
 
     # if img is None:
     #     print(f"Could not load image from path: {image_path}")
@@ -26,6 +29,7 @@ def main():
     edge_detector = cannyEdgeDetector(imgs)
     imp = ImprovedCannyEdgeDetector(imgs)
     edge_detector_cuda = CannyEdgeDetectorCUDA(imgs)
+    imp_cuda = ImprovedCannyEdgeDetectorCUDA(imgs)
     
     # Run the edge detection
     start_time_edges = time.time()
@@ -42,10 +46,16 @@ def main():
     edges_cuda = edge_detector_cuda.detect()
     end_time_edges_cuda = time.time()
     print(f"Time taken by 'edges cuda': {end_time_edges_cuda - start_time_edges_cuda} seconds")
+
+    start_time_edges4 = time.time()
+    edges4 = imp_cuda.detect()
+    end_time_edges4 = time.time()
+    print(f"Time taken by 'edges4': {end_time_edges4 - start_time_edges4} seconds")
     
     # img.append(edges)
     # imgs.append(edges)
-    imgs = imgs + edges + edges2 + edges_cuda 
+    # imgs = imgs + edges + edges2 + edges_cuda 
+    imgs = imgs + edges2 + edges_cuda
     visualize(imgs, 'gray')
     
     # Convert the result to uint8 for display compatibility

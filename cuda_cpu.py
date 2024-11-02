@@ -14,17 +14,17 @@ class CannyEdgeDetectorCUDA:
         self.highThreshold = highthreshold
 
     def gaussian_kernel(self, size, sigma=1):
-        start_gaus = time.time()
+        # start_gaus = time.time()
         size = int(size) // 2
         x, y = cp.mgrid[-size:size+1, -size:size+1]
         normal = 1 / (2.0 * cp.pi * sigma**2)
         g = cp.exp(-((x**2 + y**2) / (2.0 * sigma**2))) * normal
-        end_gaus = time.time()
-        print(f"Time for gaussian kernel: {end_gaus - start_gaus} seconds")
+        # end_gaus = time.time()
+        # print(f"Time for gaussian kernel: {end_gaus - start_gaus} seconds")
         return g
 
     def sobel_filters(self, img):
-        start_sobel = time.time()
+        # start_sobel = time.time()
         Kx = cp.array([[-1, 0, 1], [-2, 0, 2], [-1, 0, 1]], cp.float32)
         Ky = cp.array([[1, 2, 1], [0, 0, 0], [-1, -2, -1]], cp.float32)
 
@@ -34,8 +34,8 @@ class CannyEdgeDetectorCUDA:
         G = cp.hypot(Ix, Iy)
         G = G / G.max() * 255
         theta = cp.arctan2(Iy, Ix)
-        end_sobel = time.time()
-        print(f"Time taken for sobel: {end_sobel - start_sobel} seconds")
+        # end_sobel = time.time()
+        # print(f"Time taken for sobel: {end_sobel - start_sobel} seconds")
         return G, theta
 
     # def non_max_suppression(self, img, D):
@@ -64,7 +64,7 @@ class CannyEdgeDetectorCUDA:
     #     return Z
 
     def non_max_suppression(self, img, D):
-        start_maxsup = time.time()
+        # start_maxsup = time.time()
 
         M, N = img.shape
         Z = cp.zeros((M, N), dtype=cp.int32)
@@ -95,12 +95,12 @@ class CannyEdgeDetectorCUDA:
             img[1:M-1, 1:N-1], Z[1:M-1, 1:N-1]
         )
 
-        end_maxsup = time.time()
-        print(f"Time taken for non max suppression: {end_maxsup - start_maxsup} seconds")
+        # end_maxsup = time.time()
+        # print(f"Time taken for non max suppression: {end_maxsup - start_maxsup} seconds")
         return Z
 
     def threshold(self, img):
-        start_thresh = time.time()
+        # start_thresh = time.time()
         highThreshold = img.max() * self.highThreshold
         lowThreshold = highThreshold * self.lowThreshold
 
@@ -115,8 +115,8 @@ class CannyEdgeDetectorCUDA:
         res[strong_i, strong_j] = strong
         res[weak_i, weak_j] = weak
 
-        end_thresh = time.time()
-        print(f"Time taken for Thresholding: {end_thresh - start_thresh} seconds")
+        # end_thresh = time.time()
+        # print(f"Time taken for Thresholding: {end_thresh - start_thresh} seconds")
         return res
 
     # def hysteresis(self, img):
@@ -138,7 +138,7 @@ class CannyEdgeDetectorCUDA:
     #     return img
 
     def hysteresis(self, img):
-        start_hy = time.time()
+        # start_hy = time.time()
         weak, strong = self.weak_pixel, self.strong_pixel
         
         # Pad the image to handle border pixels without explicit loops
@@ -168,9 +168,10 @@ class CannyEdgeDetectorCUDA:
         # Remove padding and finalize the image
         result = cp.where(padded_img[1:-1, 1:-1] != weak, padded_img[1:-1, 1:-1], 0)
 
-        end_hy = time.time()
-        print(f"Time taken for hysteresis: {end_hy - start_hy} seconds")
+        # end_hy = time.time()
+        # print(f"Time taken for hysteresis: {end_hy - start_hy} seconds")
         return result
+
 
     def detect(self):
         for img in self.imgs:
@@ -179,10 +180,10 @@ class CannyEdgeDetectorCUDA:
             nonMaxImg = self.non_max_suppression(gradientMat, thetaMat)
             thresholdImg = self.threshold(nonMaxImg)
             img_final = self.hysteresis(thresholdImg)
-            start = time.time()
+            # start = time.time()
             self.imgs_final.append(cp.asnumpy(img_final))  # Convert back to numpy for output
-            end = time.time()
+            # end = time.time()
 
-            print(f"Time taken to send to cpu: {end-start} seconds")
+            # print(f"Time taken to send to cpu: {end-start} seconds")
 
         return self.imgs_final

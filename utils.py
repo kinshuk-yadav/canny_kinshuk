@@ -68,7 +68,7 @@ def rgb2gray(rgb):
 
     return gray
 
-def load_data(dir_name = 'canny_kinshuk\faces_imgs'):    
+def load_data(dir_name = r"C:\Users\kolla\Desktop\Desk_IVP\canny_kinshuk\faces_imgs\processed"):    
     '''
     Load images from the "faces_imgs" directory
     Images are in JPG and we convert it to gray scale images
@@ -82,14 +82,34 @@ def load_data(dir_name = 'canny_kinshuk\faces_imgs'):
     return imgs
 
 
+# def visualize(imgs, format=None, gray=False):
+#     plt.figure(figsize=(20, 40))
+#     for i, img in enumerate(imgs):
+#         if img.shape[0] == 3:
+#             img = img.transpose(1,2,0)
+#         plt_idx = i+1
+#         plt.subplot(2, 2, plt_idx)
+#         plt.imshow(img, format)
+#     plt.show()
+
 def visualize(imgs, format=None, gray=False):
-    plt.figure(figsize=(20, 40))
+    num_images = len(imgs)
+    # Calculate the number of rows and columns for the subplot grid
+    cols = 4  # set the number of columns you want, e.g., 4 images per row
+    rows = (num_images + cols - 1) // cols  # calculate required rows
+
+    plt.figure(figsize=(20, rows * 5))  # adjust figure size based on rows
     for i, img in enumerate(imgs):
         if img.shape[0] == 3:
-            img = img.transpose(1,2,0)
-        plt_idx = i+1
-        plt.subplot(2, 2, plt_idx)
-        plt.imshow(img, format)
+            img = img.transpose(1, 2, 0)
+        plt_idx = i + 1
+        plt.subplot(rows, cols, plt_idx)
+        if gray:
+            plt.imshow(img, format, cmap="gray")
+        else:
+            plt.imshow(img, format)
+        plt.axis("off")  # Hide axis for cleaner display
+    plt.tight_layout()
     plt.show()
 
 def temp_visualize(imgs,format=None, gray=False):

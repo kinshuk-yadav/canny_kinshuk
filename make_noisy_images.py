@@ -4,8 +4,9 @@ from scipy.ndimage import convolve
 import os
 
 # Path to input image and output directory
-input_image_path = './faces_imgs/lenna.jpeg'
-output_dir = './faces_imgs/processed/'
+base_dir = os.path.dirname(os.path.abspath(__file__))
+input_image_path = os.path.join(base_dir, 'faces_imgs', 'lenna.jpeg')
+output_dir = os.path.join(base_dir, 'faces_imgs', 'processed')
 
 # Create output directory if it doesn't exist
 os.makedirs(output_dir, exist_ok=True)
@@ -49,19 +50,19 @@ def add_salt_and_pepper_noise(image, percentage):
     return noisy_image
 
 # Apply motion blur with different θ values
-for theta in [10, 30]:
+for theta in [10, 20]:
     blurred_image = apply_motion_blur(image, theta)
     output_path = os.path.join(output_dir, f'lenna_motion_blur_theta_{theta}.jpeg')
     cv2.imwrite(output_path, blurred_image)
 
 # Apply Gaussian noise with different σ values
-for sigma in [0.01, 0.03, 0.05, 0.1, 0.3]:
+for sigma in [0.05, 0.1, 0.2]:
     noisy_image = add_gaussian_noise(image, sigma)
     output_path = os.path.join(output_dir, f'lenna_gaussian_noise_sigma_{sigma}.jpeg')
     cv2.imwrite(output_path, noisy_image)
 
 # Apply Salt & Pepper noise with different percentages
-for percentage in [0.05, 0.1, 0.2, 0.3]:
+for percentage in [0.05, 0.1, 0.2]:
     noisy_image = add_salt_and_pepper_noise(image, percentage)
     output_path = os.path.join(output_dir, f'lenna_salt_pepper_noise_{int(percentage*100)}.jpeg')
     cv2.imwrite(output_path, noisy_image)
