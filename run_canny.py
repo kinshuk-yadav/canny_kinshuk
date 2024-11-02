@@ -6,6 +6,7 @@ import cv2
 import numpy as np
 from canny_try import cannyEdgeDetector
 from improved_canny_try import ImprovedCannyEdgeDetector
+# from canny_cuda import CannyEdgeDetectorCUDA
 
 def main():
     # Load the image in grayscale
@@ -23,13 +24,15 @@ def main():
     # Initialize the Canny edge detector with the image
     edge_detector = cannyEdgeDetector(imgs)
     imp = ImprovedCannyEdgeDetector(imgs)
+    # edge_detector_cuda = CannyEdgeDetectorCUDA(imgs)
     
     # Run the edge detection
     edges = edge_detector.detect()
     edges2 = imp.detect()
+    # edges_cuda = edge_detector_cuda.detect()
     # img.append(edges)
     # imgs.append(edges)
-    imgs = imgs + edges + edges2
+    imgs = imgs + edges + edges2 
     visualize(imgs, 'gray')
     
     # Convert the result to uint8 for display compatibility
