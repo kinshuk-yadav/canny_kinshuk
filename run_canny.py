@@ -35,21 +35,22 @@ def main():
     start_time_edges = time.time()
     edges = edge_detector.detect()
     end_time_edges = time.time()
-    print(f"Time taken by CPU for Canny Edge Detector: {end_time_edges - start_time_edges} seconds")
 
     start_time_edges2 = time.time()
     edges2 = imp.detect()
     end_time_edges2 = time.time()
-    print(f"Time taken by CPU for Improved Canny Edge Detector: {end_time_edges2 - start_time_edges2} seconds")
 
     start_time_edges_cuda = time.time()
     edges_cuda = edge_detector_cuda.detect()
     end_time_edges_cuda = time.time()
-    print(f"Time taken by GPU for Canny Edge Detector: {end_time_edges_cuda - start_time_edges_cuda} seconds")
 
     start_time_edges4 = time.time()
     edges4 = imp_cuda.detect()
     end_time_edges4 = time.time()
+
+    print(f"Time taken by CPU for Canny Edge Detector: {end_time_edges - start_time_edges} seconds")
+    print(f"Time taken by CPU for Improved Canny Edge Detector: {end_time_edges2 - start_time_edges2} seconds")
+    print(f"Time taken by GPU for Canny Edge Detector: {end_time_edges_cuda - start_time_edges_cuda} seconds")
     print(f"Time taken by GPU for Improved Canny Edge Detector: {end_time_edges4 - start_time_edges4} seconds")
     
     # img.append(edges)
