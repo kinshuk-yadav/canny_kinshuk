@@ -2,6 +2,7 @@ from scipy import ndimage, misc
 from scipy.ndimage.filters import convolve, median_filter
 from scipy.signal import wiener
 import numpy as np
+import warnings
 
 class ImprovedCannyEdgeDetector:
     def __init__(self, imgs, sigma=1, kernel_size=5, weak_pixel=75, strong_pixel=255, lowthreshold=0.05, highthreshold=0.15):
@@ -115,6 +116,7 @@ class ImprovedCannyEdgeDetector:
             # Apply median filter
             img = median_filter(img, size=3)
             # Apply Wiener filter
+            # warnings.filterwarnings("ignore")
             img = wiener(img)
             # Proceed with Canny edge detection steps
             self.img_smoothed = convolve(img, self.gaussian_kernel(self.kernel_size, self.sigma))

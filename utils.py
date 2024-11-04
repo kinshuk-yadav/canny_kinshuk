@@ -38,9 +38,30 @@ def add_noise(img, noise_type="salt_and_pepper", percentage_of_noise=0.2):
     
     return noisy_img
 
+# def load_with_noise(dir_name='canny_kinshuk/faces_imgs', noise_type="salt_and_pepper", percentage_of_noise=0.2):
+#     """
+#     Load images from a specified directory, convert to grayscale, and apply noise.
+    
+#     Parameters:
+#         dir_name (str): Directory containing image files.
+#         noise_type (str): Type of noise to apply ('salt_and_pepper' or 'gaussian').
+#         percentage_of_noise (float): Percentage of image pixels to apply noise to.
+        
+#     Returns:
+#         List of noisy grayscale images.
+#     """
+#     imgs = []
+#     for filename in os.listdir(dir_name):
+#         if os.path.isfile(os.path.join(dir_name, filename)):
+#             img = mpimg.imread(os.path.join(dir_name, filename))
+#             img = rgb2gray(img)
+#             img_noisy = add_noise(img, noise_type, percentage_of_noise)
+#             imgs.append(img_noisy)
+#     return imgs
+
 def load_with_noise(dir_name='canny_kinshuk/faces_imgs', noise_type="salt_and_pepper", percentage_of_noise=0.2):
     """
-    Load images from a specified directory, convert to grayscale, and apply noise.
+    Load images from a specified directory, convert to grayscale if color, and apply noise.
     
     Parameters:
         dir_name (str): Directory containing image files.
@@ -52,14 +73,18 @@ def load_with_noise(dir_name='canny_kinshuk/faces_imgs', noise_type="salt_and_pe
     """
     imgs = []
     for filename in os.listdir(dir_name):
-        if os.path.isfile(os.path.join(dir_name, filename)):
-            img = mpimg.imread(os.path.join(dir_name, filename))
-            img = rgb2gray(img)
+        filepath = os.path.join(dir_name, filename)
+        if os.path.isfile(filepath):
+            img = mpimg.imread(filepath)
+            
+            # Convert to grayscale only if the image has 3 color channels (color image)
+            if img.ndim == 3 and img.shape[2] == 3:
+                img = rgb2gray(img)
+                
             img_noisy = add_noise(img, noise_type, percentage_of_noise)
             imgs.append(img_noisy)
+    
     return imgs
-
-
 
 def rgb2gray(rgb):
 
