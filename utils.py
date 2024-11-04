@@ -38,30 +38,9 @@ def add_noise(img, noise_type="salt_and_pepper", percentage_of_noise=0.2):
     
     return noisy_img
 
-# def load_with_noise(dir_name='canny_kinshuk/faces_imgs', noise_type="salt_and_pepper", percentage_of_noise=0.2):
-#     """
-#     Load images from a specified directory, convert to grayscale, and apply noise.
-    
-#     Parameters:
-#         dir_name (str): Directory containing image files.
-#         noise_type (str): Type of noise to apply ('salt_and_pepper' or 'gaussian').
-#         percentage_of_noise (float): Percentage of image pixels to apply noise to.
-        
-#     Returns:
-#         List of noisy grayscale images.
-#     """
-#     imgs = []
-#     for filename in os.listdir(dir_name):
-#         if os.path.isfile(os.path.join(dir_name, filename)):
-#             img = mpimg.imread(os.path.join(dir_name, filename))
-#             img = rgb2gray(img)
-#             img_noisy = add_noise(img, noise_type, percentage_of_noise)
-#             imgs.append(img_noisy)
-#     return imgs
-
-def load_with_noise(dir_name='canny_kinshuk/faces_imgs', noise_type="salt_and_pepper", percentage_of_noise=0.2):
+def load_with_noise(dir_name='faces_imgs/processed', noise_type="salt_and_pepper", percentage_of_noise=0.2):
     """
-    Load images from a specified directory, convert to grayscale if color, and apply noise.
+    Load images from a specified directory, convert to grayscale, and apply noise.
     
     Parameters:
         dir_name (str): Directory containing image files.
@@ -73,18 +52,14 @@ def load_with_noise(dir_name='canny_kinshuk/faces_imgs', noise_type="salt_and_pe
     """
     imgs = []
     for filename in os.listdir(dir_name):
-        filepath = os.path.join(dir_name, filename)
-        if os.path.isfile(filepath):
-            img = mpimg.imread(filepath)
-            
-            # Convert to grayscale only if the image has 3 color channels (color image)
-            if img.ndim == 3 and img.shape[2] == 3:
-                img = rgb2gray(img)
-                
+        if os.path.isfile(os.path.join(dir_name, filename)):
+            img = mpimg.imread(os.path.join(dir_name, filename))
+            img = rgb2gray(img)
             img_noisy = add_noise(img, noise_type, percentage_of_noise)
             imgs.append(img_noisy)
-    
     return imgs
+
+
 
 def rgb2gray(rgb):
 
@@ -93,7 +68,7 @@ def rgb2gray(rgb):
 
     return gray
 
-def load_data(dir_name = r"C:\Users\kolla\Desktop\Desk_IVP\canny_kinshuk\faces_imgs\processed"):    
+def load_data(dir_name = 'faces_imgs'):    
     '''
     Load images from the "faces_imgs" directory
     Images are in JPG and we convert it to gray scale images
@@ -102,7 +77,7 @@ def load_data(dir_name = r"C:\Users\kolla\Desktop\Desk_IVP\canny_kinshuk\faces_i
     for filename in os.listdir(dir_name):
         if os.path.isfile(dir_name + '/' + filename):
             img = mpimg.imread(dir_name + '/' + filename)
-            img = rgb2gray(img)
+            # img = rgb2gray(img)
             imgs.append(img)
     return imgs
 
@@ -118,31 +93,22 @@ def load_data(dir_name = r"C:\Users\kolla\Desktop\Desk_IVP\canny_kinshuk\faces_i
 #     plt.show()
 
 def visualize(imgs, format=None, gray=False):
-    num_images = len(imgs)
-    # Calculate the number of rows and columns for the subplot grid
-    cols = 4  # set the number of columns you want, e.g., 4 images per row
-    rows = (num_images + cols - 1) // cols  # calculate required rows
-
-    plt.figure(figsize=(20, rows * 5))  # adjust figure size based on rows
-    for i, img in enumerate(imgs):
-        if img.shape[0] == 3:
-            img = img.transpose(1, 2, 0)
-        plt_idx = i + 1
-        plt.subplot(rows, cols, plt_idx)
-        if gray:
-            plt.imshow(img, format, cmap="gray")
-        else:
-            plt.imshow(img, format)
-        plt.axis("off")  # Hide axis for cleaner display
-    plt.tight_layout()
-    plt.show()
-
-def temp_visualize(imgs,format=None, gray=False):
     plt.figure(figsize=(20, 40))
     for i, img in enumerate(imgs):
         if img.shape[0] == 3:
             img = img.transpose(1,2,0)
         plt_idx = i+1
-        plt.subplot(2, 2, plt_idx)
+        plt.subplot(3, 3, plt_idx)
+        plt.imshow(img, format)
+    plt.show()
+
+def temp_visualize(imgs,format=None, gray=False):
+    plt.figure(figsize=(20, 40))
+    x = int(len(imgs)/4)
+    for i, img in enumerate(imgs):
+        if img.shape[0] == 3:
+            img = img.transpose(1,2,0)
+        plt_idx = i+1
+        plt.subplot(x, 4, plt_idx)
         plt.imshow(img, format)
     plt.show()
